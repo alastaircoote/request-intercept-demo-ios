@@ -8,6 +8,6 @@ the basic concept.
 All of the relevant code is in `ViewController.swift`. Compare the browser view
 in-app with the one you get when loading:
 
-    https://github.com/alastaircoote/request-intercept-demo
+    https://request-intercept-demo.glitch.me
 
 in any other browser.
