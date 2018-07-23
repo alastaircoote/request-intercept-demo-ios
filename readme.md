@@ -11,3 +11,9 @@ in-app with the one you get when loading:
     https://request-intercept-demo.glitch.me
 
 in any other browser.
+
+### Android Version
+
+There's an Android equivalent of this at:
+
+https://github.com/alastaircoote/request-intercept-demo-android
