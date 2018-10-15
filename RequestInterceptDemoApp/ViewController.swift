@@ -12,8 +12,8 @@ import WebKit
 
 struct CacheEntry {
     let url: URL
-    let statusCode:Int
-    let headers: [String:String]
+    let statusCode: Int
+    let headers: [String: String]
     let content: Data
 }
 
@@ -22,7 +22,7 @@ let cachedItems: [CacheEntry] = [
         url: URL(string: "https://request-intercept-demo.glitch.me/style.css")!,
         statusCode: 200,
         headers: [
-            "Content-Type": "text/css; charset=utf-8"
+            "Content-Type": "text/css; charset=utf-8",
         ],
         content: """
             body {
@@ -30,91 +30,80 @@ let cachedItems: [CacheEntry] = [
                 color: white;
             }
         """.data(using: .utf8)!
-    )
+    ),
 ]
 
 class ViewController: UIViewController, WKURLSchemeHandler {
-    
     let schemeTaskManager = URLSchemeTaskManager()
-    
+
     override func viewDidLoad() {
-        
         // First we create a custom configuration, and add this class
         // as a handler for our custom URL scheme, "requestdemo":
-        
+
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(self, forURLScheme: "requestdemo")
-        
+
         // Then use that config to create the webview and add it to the controller:
-        let webview = WKWebView(frame: self.view.frame, configuration: config)
-        self.view.addSubview(webview)
-        
+        let webview = WKWebView(frame: view.frame, configuration: config)
+        view.addSubview(webview)
+
         // Then, finally, send a request using that custom scheme, but that we want
         // to map to an HTTPS url:
         webview.load(URLRequest(url: URL(string: "requestdemo://request-intercept-demo.glitch.me")!))
-     
     }
 
     // We need to map URLs between the custom scheme and HTTPS. URLComponents
     // is the easiest way to do that.
-    func requestdemoURLToHTTPS(originalURL:URL) -> URL {
+    func requestdemoURLToHTTPS(originalURL: URL) -> URL {
         var mutableURL = URLComponents(url: originalURL, resolvingAgainstBaseURL: true)!
         mutableURL.scheme = "https"
         return mutableURL.url!
     }
-    
-    func httpsURLToRequestDemo(originalURL:URL)  -> URL {
+
+    func httpsURLToRequestDemo(originalURL: URL) -> URL {
         var mutableURL = URLComponents(url: originalURL, resolvingAgainstBaseURL: true)!
         mutableURL.scheme = "requestdemo"
         return mutableURL.url!
     }
 
     // These two functions are the implementations of WKURLSchemeHandler:
-    
-    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        
+
+    func webView(_: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let originalURL = urlSchemeTask.request.url!
-        
+
         // Map the requestdemo: URL to https:
-        let httpsURL = self.requestdemoURLToHTTPS(originalURL: originalURL)
-        
+        let httpsURL = requestdemoURLToHTTPS(originalURL: originalURL)
+
         // Then check if we have a cached asset with that URL.
         let cachedItem = cachedItems.first(where: { $0.url.absoluteString == httpsURL.absoluteString })
-      
+
         if let cachedItemExists = cachedItem {
-            
             NSLog("Found cached response for \(httpsURL.absoluteString)")
-            
+
             // If the cached asset exists, we construct an HTTPURLResponse using the custom scheme URL,
             // and set the headers we have in the cache entry:
-            
+
             let urlResponse = HTTPURLResponse(url: originalURL, statusCode: cachedItemExists.statusCode, httpVersion: nil, headerFields: cachedItemExists.headers)!
-            
+
             // Then send that initial response back to the webview:
             urlSchemeTask.didReceive(urlResponse)
-            
+
             // From here, WKURLSchemeHandler supports sending chunks of data, so in a real-world
             // scenario we might implement streaming from disk rather than loading all of the content
             // into memory. But for this demo we'll just immediately output the cached asset content
             // and finish the response:
-            
+
             urlSchemeTask.didReceive(cachedItemExists.content)
             urlSchemeTask.didFinish()
-            
+
         } else {
-            
             NSLog("No cached response for \(httpsURL.absoluteString)")
-            
-            self.schemeTaskManager.process(schemeTask: urlSchemeTask, httpsURL: httpsURL)
 
+            schemeTaskManager.process(schemeTask: urlSchemeTask, httpsURL: httpsURL)
         }
-        
-        
-    }
-    
-    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
-       self.schemeTaskManager.stop(schemeTask: urlSchemeTask)
     }
 
+    func webView(_: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
+        schemeTaskManager.stop(schemeTask: urlSchemeTask)
+    }
 }
-
