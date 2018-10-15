@@ -35,6 +35,8 @@ let cachedItems: [CacheEntry] = [
 
 class ViewController: UIViewController, WKURLSchemeHandler {
     
+    let schemeTaskManager = URLSchemeTaskManager()
+    
     override func viewDidLoad() {
         
         // First we create a custom configuration, and add this class
@@ -81,6 +83,8 @@ class ViewController: UIViewController, WKURLSchemeHandler {
       
         if let cachedItemExists = cachedItem {
             
+            NSLog("Found cached response for \(httpsURL.absoluteString)")
+            
             // If the cached asset exists, we construct an HTTPURLResponse using the custom scheme URL,
             // and set the headers we have in the cache entry:
             
@@ -99,60 +103,17 @@ class ViewController: UIViewController, WKURLSchemeHandler {
             
         } else {
             
-            // If we don't have a cached asset, we perform a regular network request to the HTTPS
-            // url, mirroring the behaviour the webview would normally do. Key benefit here is that
-            // the remote servers won't know anything about the custom scheme - to them it'll just
-            // look like a regular request.
+            NSLog("No cached response for \(httpsURL.absoluteString)")
             
-            URLSession.shared.dataTask(with: httpsURL) { (data, response, err) in
-                
-                if let errExists = err {
-                    urlSchemeTask.didFailWithError(errExists)
-                    return
-                }
-                
-                // To make sure the webview is internally consistent we need to make sure the
-                // URLResponse returned is one with the custom scheme, not the HTTP scheme
-                // we just received. So we create a new HTTPURLResponse that takes values from
-                // the one.
-                
-                let httpsResponse = response as! HTTPURLResponse
-                
-                // We could use originalURL here, but there's a chance we were sent a 301/302 response
-                // and were redirected before being sent a response. In a real scenario we'd want to *not*
-                // follow that redirect and return the redirect to the browser, through this delegate method:
-                // https://developer.apple.com/documentation/foundation/nsurlsessiontaskdelegate/1411626-urlsession
-                // but again, for the demo we'll just ignore that potential bug.
-                
-                let customSchemeURL = self.httpsURLToRequestDemo(originalURL: httpsResponse.url!)
-                
-                let customResponse = HTTPURLResponse(url: customSchemeURL, statusCode: httpsResponse.statusCode, httpVersion: nil, headerFields: (httpsResponse.allHeaderFields as! [String: String]))!
-                
-                // Send through our custom scheme headers:
-                urlSchemeTask.didReceive(customResponse)
-                
-                if let dataExists = data {
-                    
-                    // As with the cache response, in a real implementation we'd want to use
-                    // streaming here rather than loading the whole response into memory then
-                    // sending it all at once:
-                    
-                    urlSchemeTask.didReceive(dataExists)
-                }
-                
-                // and finish the response:
-                urlSchemeTask.didFinish()
-            }.resume()
+            self.schemeTaskManager.process(schemeTask: urlSchemeTask, httpsURL: httpsURL)
+
         }
-        
-        
         
         
     }
     
     func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
-        // If we were streaming content this is where we'd make sure we
-        // cancel the stream.
+       self.schemeTaskManager.stop(schemeTask: urlSchemeTask)
     }
 
 }
