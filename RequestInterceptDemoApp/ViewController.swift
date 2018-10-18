@@ -52,27 +52,13 @@ class ViewController: UIViewController, WKURLSchemeHandler {
         webview.load(URLRequest(url: URL(string: "requestdemo://request-intercept-demo.glitch.me")!))
     }
 
-    // We need to map URLs between the custom scheme and HTTPS. URLComponents
-    // is the easiest way to do that.
-    func requestdemoURLToHTTPS(originalURL: URL) -> URL {
-        var mutableURL = URLComponents(url: originalURL, resolvingAgainstBaseURL: true)!
-        mutableURL.scheme = "https"
-        return mutableURL.url!
-    }
-
-    func httpsURLToRequestDemo(originalURL: URL) -> URL {
-        var mutableURL = URLComponents(url: originalURL, resolvingAgainstBaseURL: true)!
-        mutableURL.scheme = "requestdemo"
-        return mutableURL.url!
-    }
-
     // These two functions are the implementations of WKURLSchemeHandler:
 
     func webView(_: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let originalURL = urlSchemeTask.request.url!
 
         // Map the requestdemo: URL to https:
-        let httpsURL = requestdemoURLToHTTPS(originalURL: originalURL)
+        let httpsURL = URLConvert.requestdemoURLToHTTPS(originalURL: originalURL)
 
         // Then check if we have a cached asset with that URL.
         let cachedItem = cachedItems.first(where: { $0.url.absoluteString == httpsURL.absoluteString })

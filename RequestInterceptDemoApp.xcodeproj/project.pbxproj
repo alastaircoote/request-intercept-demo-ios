@@ -13,6 +13,7 @@
 		0AEAEA0C20F900C400887C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEAEA0B20F900C400887C99 /* Assets.xcassets */; };
 		0AEAEA0F20F900C400887C99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEAEA0D20F900C400887C99 /* LaunchScreen.storyboard */; };
 		D369996F2178F9A700CD293B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = D369996E2178F9A700CD293B /* ObjC.m */; };
+		D36999712178FC1600CD293B /* URLConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36999702178FC1600CD293B /* URLConvert.swift */; };
 		D3E87F22215A855E00697F05 /* SchemeTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E87F21215A855E00697F05 /* SchemeTaskManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		D369996C2178F99200CD293B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		D369996D2178F9A600CD293B /* RequestInterceptDemoApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RequestInterceptDemoApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		D369996E2178F9A700CD293B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
+		D36999702178FC1600CD293B /* URLConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConvert.swift; sourceTree = "<group>"; };
 		D3E87F21215A855E00697F05 /* SchemeTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeTaskManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +72,7 @@
 				D369996C2178F99200CD293B /* ObjC.h */,
 				D369996E2178F9A700CD293B /* ObjC.m */,
 				D369996D2178F9A600CD293B /* RequestInterceptDemoApp-Bridging-Header.h */,
+				D36999702178FC1600CD293B /* URLConvert.swift */,
 			);
 			path = RequestInterceptDemoApp;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 			files = (
 				0AEAEA0720F900C100887C99 /* ViewController.swift in Sources */,
 				D3E87F22215A855E00697F05 /* SchemeTaskManager.swift in Sources */,
+				D36999712178FC1600CD293B /* URLConvert.swift in Sources */,
 				0AEAEA0520F900C100887C99 /* AppDelegate.swift in Sources */,
 				D369996F2178F9A700CD293B /* ObjC.m in Sources */,
 			);

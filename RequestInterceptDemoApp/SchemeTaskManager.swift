@@ -75,9 +75,26 @@ class URLSchemeTaskManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate
             // shouldn't ever happen.
             return
         }
-
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            // Should obviously have a better way of handling this:
+            fatalError("Response should always be an HTTPURLResponse")
+        }
+        
+        guard let responseURL = response.url else {
+            fatalError("Response should always have a URL")
+        }
+        
+        // NSURLSession automatically decodes GZipped responses, so we need to remove any encoding headers, otherwise
+        // the webview will try to decode a GZipped body again itself
+        let filteredHeaders = httpResponse.allHeaderFields.filter { ($0.key as? String)?.lowercased() != "content-encoding" }
+        
+        guard let requestDemoResponse = HTTPURLResponse(url: URLConvert.httpsURLToRequestDemo(originalURL: responseURL), statusCode: httpResponse.statusCode, httpVersion: nil, headerFields: filteredHeaders as? [String:String]) else {
+            fatalError("Could not create custom HTTP response")
+        }
+        
         // We now forward on the initial response to our WKURLScheme handler:
-        link.schemeTask.didReceive(response)
+        link.schemeTask.didReceive(requestDemoResponse)
 
         // And then instruct this response to become a stream, so we can send data
         // through as soon as it becomes available:
