@@ -90,7 +90,16 @@ class URLSchemeTaskManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate
             return
         }
         NSLog("Received \(data.count) bytes for \(link.dataTask.response?.url?.absoluteString ?? "unknown URL")")
-        link.schemeTask.didReceive(data)
+        
+        do {
+            try ObjC.catchException {
+                link.schemeTask.didReceive(data)
+            }
+        } catch {
+            // If the task was cancelled while this runs the didReceive call throws. This error is acceptable
+            // because it's trying to write data for a request that's already been disregarded.
+        }
+        
     }
 
     // Once the URLSessionTask has finished, we close up the WKURLSchemeTask, passing along any
@@ -106,13 +115,22 @@ class URLSchemeTaskManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate
             return
         }
 
-        if let error = error {
-            NSLog("Failing with error for URL \(link.dataTask.response?.url?.absoluteString ?? "unknown URL")")
-            link.schemeTask.didFailWithError(error)
-        } else {
-            NSLog("Successfully finishing URL \(link.dataTask.response?.url?.absoluteString ?? "unknown URL")")
-            link.schemeTask.didFinish()
+        do {
+            try ObjC.catchException {
+                if let error = error {
+                    NSLog("Failing with error for URL \(link.dataTask.response?.url?.absoluteString ?? "unknown URL")")
+                    link.schemeTask.didFailWithError(error)
+                } else {
+                    NSLog("Successfully finishing URL \(link.dataTask.response?.url?.absoluteString ?? "unknown URL")")
+                    link.schemeTask.didFinish()
+                }
+            }
+        } catch {
+            // Similar to the above, the task will throw if it's been cancelled before this. But again, it's fine, because
+            // the webview isn't listening to any response events any more.
         }
+        
+        
 
         currentTasks.remove(link)
     }

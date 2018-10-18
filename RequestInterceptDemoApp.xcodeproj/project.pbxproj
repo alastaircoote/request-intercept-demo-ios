@@ -12,6 +12,7 @@
 		0AEAEA0A20F900C100887C99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEAEA0820F900C100887C99 /* Main.storyboard */; };
 		0AEAEA0C20F900C400887C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEAEA0B20F900C400887C99 /* Assets.xcassets */; };
 		0AEAEA0F20F900C400887C99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEAEA0D20F900C400887C99 /* LaunchScreen.storyboard */; };
+		D369996F2178F9A700CD293B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = D369996E2178F9A700CD293B /* ObjC.m */; };
 		D3E87F22215A855E00697F05 /* SchemeTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E87F21215A855E00697F05 /* SchemeTaskManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,9 @@
 		0AEAEA0B20F900C400887C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEAEA0E20F900C400887C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0AEAEA1020F900C400887C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D369996C2178F99200CD293B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
+		D369996D2178F9A600CD293B /* RequestInterceptDemoApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RequestInterceptDemoApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		D369996E2178F9A700CD293B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		D3E87F21215A855E00697F05 /* SchemeTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeTaskManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +67,9 @@
 				0AEAEA0D20F900C400887C99 /* LaunchScreen.storyboard */,
 				0AEAEA1020F900C400887C99 /* Info.plist */,
 				D3E87F21215A855E00697F05 /* SchemeTaskManager.swift */,
+				D369996C2178F99200CD293B /* ObjC.h */,
+				D369996E2178F9A700CD293B /* ObjC.m */,
+				D369996D2178F9A600CD293B /* RequestInterceptDemoApp-Bridging-Header.h */,
 			);
 			path = RequestInterceptDemoApp;
 			sourceTree = "<group>";
@@ -99,6 +106,7 @@
 				TargetAttributes = {
 					0AEAEA0020F900C100887C99 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -141,6 +149,7 @@
 				0AEAEA0720F900C100887C99 /* ViewController.swift in Sources */,
 				D3E87F22215A855E00697F05 /* SchemeTaskManager.swift in Sources */,
 				0AEAEA0520F900C100887C99 /* AppDelegate.swift in Sources */,
+				D369996F2178F9A700CD293B /* ObjC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = RequestInterceptDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -292,6 +302,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.nyt.newsdev.RequestInterceptDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RequestInterceptDemoApp/RequestInterceptDemoApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -301,6 +313,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = RequestInterceptDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -309,6 +322,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.nyt.newsdev.RequestInterceptDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RequestInterceptDemoApp/RequestInterceptDemoApp-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
